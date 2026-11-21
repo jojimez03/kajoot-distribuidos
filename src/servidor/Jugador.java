@@ -34,6 +34,10 @@ public class Jugador {
     public int getPuntos() { return this.puntos; }
 
     public void cerrar() {
-        sokcet.close();
+        try{
+            socket.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
