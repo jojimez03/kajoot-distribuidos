@@ -3,6 +3,7 @@ package servidor;
 import java.io.IOException;
 import java.net.*;
 import java.util.concurrent.Executors;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 
 
@@ -15,6 +16,15 @@ public class ServidorKajoot {
         try(ServerSocket ss = new ServerSocket(Protocolo.PUERTO)){
             ExecutorService pool = Executors.newCachedThreadPool();
             System.out.println("Servidor escuchando en el puerto " + Protocolo.PUERTO);
+
+            Scanner teclado = new Scanner(System.in);
+            System.out.print("¿Cuántos jugadores? ");
+            int numJugadores = teclado.nextInt();
+
+            // la partida arranca en su hilo y se queda en el await esperando
+            // los jugadores entran aqui y se unen a la partida
+            Partida partida = new Partida(new BancoPreguntas().cargar(), numJugadores);
+            pool.execute(partida);
             
             while(true){
                 
@@ -22,7 +32,7 @@ public class ServidorKajoot {
                     Socket cliente = ss.accept();
                     Jugador jugador = new Jugador(cliente);
                     
-                    pool.execute(new AtenderJugador(jugador));
+                    pool.execute(new AtenderJugador(jugador, partida));
 
                     System.out.println("Nueva conexion desde " + cliente.getInetAddress());
 

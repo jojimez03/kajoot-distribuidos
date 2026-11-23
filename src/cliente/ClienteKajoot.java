@@ -23,9 +23,41 @@ public class ClienteKajoot {
 
             String leido = entrada.readLine();
             System.out.println("Mensaje del servidor " + leido);
+            if(leido==null || !leido.equals(Protocolo.OK)){
+                System.out.println("No se pudo entrar ");
+                return;
+            }
+            System.out.println("Dentro! Esperando al resto de jugadores...");
 
-            System.out.println("Pulsa Enter para salir...");
-            teclado.nextLine();
+            String linea;
+            while((linea=entrada.readLine())!=null){
+                String[] campos = Protocolo.partir(linea);
+
+                switch (campos[0]) {
+                    case Protocolo.PREGUNTA:
+                        System.out.println("Pregunta activado");
+                        break;
+                    case Protocolo.RESULTADO:
+                        System.out.println("Resutlado activado");
+                        break;
+                    case Protocolo.RANKING:
+                        System.out.println("Ranking activado");
+                        break;
+                    case Protocolo.ERROR:
+                        System.out.println("Error activado");
+                        break;
+                    case Protocolo.FIN:
+                        System.out.println("Fin activado");
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            }
+
+
 
         }catch(IOException e){
             System.out.println("No se pudo conectar al servidor");
