@@ -35,20 +35,55 @@ public class ClienteKajoot {
 
                 switch (campos[0]) {
                     case Protocolo.PREGUNTA:
-                        System.out.println("Pregunta activado");
+                        // PREGUNTA|n|total|enunciado|A|B|C|D
+                        System.out.println();
+                        System.out.println("Pregunta " + campos[1] + "/" + campos[2] + ": " + campos[3]);
+                        System.out.println("  A) " + campos[4]);
+                        System.out.println("  B) " + campos[5]);
+                        System.out.println("  C) " + campos[6]);
+                        System.out.println("  D) " + campos[7]);
+
+                        // Pedir la letra hasta que sea A, B, C o D
+                        String letra = "";
+                        while (!letra.matches("[ABCD]")) {
+                            System.out.print("Tu respuesta (A-D): ");
+                            letra = teclado.nextLine().trim().toUpperCase();
+                        }
+
+                        salida.println(Protocolo.construir(Protocolo.RESPUESTA, campos[1], letra));
+                        System.out.println("Esperando al resto de jugadores...");
+
                         break;
                     case Protocolo.RESULTADO:
-                        System.out.println("Resutlado activado");
+                        // RESULTADO|ACIERTO  o  RESULTADO|FALLO
+                        if (campos[1].equals("ACIERTO")) {
+                            System.out.println("¡Correcto!");
+                        } else {
+                            System.out.println("Incorrecto");
+                        }
                         break;
+
                     case Protocolo.RANKING:
-                        System.out.println("Ranking activado");
+                        // RANKING|Jon:3|Ana:2
+                        System.out.println("--- Ranking ---");
+                        for (int i = 1; i < campos.length; i++) {
+                            System.out.println("  " + i + ". " + campos[i]);
+                        }
                         break;
+
                     case Protocolo.ERROR:
-                        System.out.println("Error activado");
+                        // ERROR|motivo
+                        System.out.println("Error: " + campos[1]);
                         break;
+
                     case Protocolo.FIN:
-                        System.out.println("Fin activado");
-                        break;
+                        // FIN|Jon:3|Ana:2
+                        System.out.println();
+                        System.out.println("=== FIN DE LA PARTIDA ===");
+                        for (int i = 1; i < campos.length; i++) {
+                            System.out.println("  " + i + ". " + campos[i]);
+                        }
+                        return;
 
                     default:
                         break;

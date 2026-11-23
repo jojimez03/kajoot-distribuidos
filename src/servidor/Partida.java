@@ -24,6 +24,7 @@ public class Partida implements Runnable{
     // llevar el control de los jugadores que si han respondido
     private Set<Jugador> hanRespondido;
 
+    private Timer timer;
 
 
     public Partida(List<Pregunta> preguntas, int numJugadores){
@@ -34,6 +35,7 @@ public class Partida implements Runnable{
         this.jugadores = new ArrayList<>();
 
         this.hanRespondido= new HashSet<>();
+        this.timer = new Timer();
     }
 
     public boolean unirse(Jugador j){
@@ -62,10 +64,13 @@ public class Partida implements Runnable{
                 String mensajePreg = p.toMensaje(preguntaActual, numPreguntas);
                 enviarATodos(mensajePreg);
 
+                FinRonda tarea = new FinRonda(this, preguntaActual);
+                timer.schedule(tarea, SEGUNDOS * 1000);  
+
                 respuestasRonda.await();
+                tarea.cancel();
 
                 enviarATodos(Protocolo.construir(Protocolo.RANKING, ranking()));
-
 
 
                 preguntaActual++;
