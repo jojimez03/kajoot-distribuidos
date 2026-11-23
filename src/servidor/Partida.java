@@ -7,6 +7,8 @@ import comun.Protocolo;
 
 public class Partida implements Runnable{
 
+    private static final int SEGUNDOS = 20;
+
     private List<Pregunta> preguntas;
     private List<Jugador> jugadores;
 
@@ -19,6 +21,9 @@ public class Partida implements Runnable{
     // numero de la pregunta actual
     private int preguntaActual;
 
+    // llevar el control de los jugadores que si han respondido
+    private Set<Jugador> hanRespondido;
+
 
 
     public Partida(List<Pregunta> preguntas, int numJugadores){
@@ -27,6 +32,8 @@ public class Partida implements Runnable{
         this.jugadoresListos=new CountDownLatch(numJugadores);
 
         this.jugadores = new ArrayList<>();
+
+        this.hanRespondido= new HashSet<>();
     }
 
     public boolean unirse(Jugador j){
@@ -48,7 +55,7 @@ public class Partida implements Runnable{
             int numPreguntas=preguntas.size();
             this.preguntaActual=1;
 
-            for( Pregunta p: preguntas){
+            for(Pregunta p: preguntas){
                 respuestasRonda = new CountDownLatch(numJugadores);
                 
 
@@ -111,6 +118,23 @@ public class Partida implements Runnable{
         }
 
         return String.join("|", campos);
+    }
+
+
+    public void cerrarPorTiempo(int n) {
+        if (n != preguntaActual) {
+            return;   // esa ronda ya terminó: la tarea ha llegado tarde
+        }
+
+        System.out.println("Fin del tiempo para la pregunta " + n);
+
+        for (Jugador j : jugadores) {
+            if (!hanRespondido.contains(j)) {
+                hanRespondido.add(j);
+                j.enviar(Protocolo.construir(Protocolo.RESULTADO, "TIEMPO"));
+                respuestasRonda.countDown();
+            }
+        }
     }
 
 
