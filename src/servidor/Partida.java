@@ -92,9 +92,9 @@ public class Partida implements Runnable{
     }
 
     public void registrarRespuesta(Jugador j, int n, String letra){
-        if(n==preguntaActual ){
+        if(n==preguntaActual || hanRespondido.add(j)){
             if(preguntas.get(preguntaActual-1).esCorrecta(letra)){
-                j.sumarPuntos(1);
+                j.sumarPuntos(10);
                 j.enviar(Protocolo.construir(Protocolo.RESULTADO,"ACIERTO"));
             }else{
                 j.enviar(Protocolo.construir(Protocolo.RESULTADO,"FALLO"));
@@ -102,7 +102,7 @@ public class Partida implements Runnable{
             // despues de enviar el reusltado
             respuestasRonda.countDown();
         }else{
-            return;
+            return; // respuesta tardia o repetida
         }
 
     }
