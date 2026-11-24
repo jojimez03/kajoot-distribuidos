@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE preguntas SYSTEM "preguntas.dtd">
+<preguntas>
+
+    <pregunta correcta="B">
+        <enunciado>¿Cuál es la capital de Francia?</enunciado>
+        <opcion>Madrid</opcion>
+        <opcion>París</opcion>
+        <opcion>Londres</opcion>
+        <opcion>Roma</opcion>
+    </pregunta>
+
+    <pregunta correcta="D">
+        <enunciado>¿Cuánto es 2 + 2?</enunciado>
+        <opcion>3</opcion>
+        <opcion>5</opcion>
+        <opcion>22</opcion>
+        <opcion>4</opcion>
+    </pregunta>
+
+    <pregunta correcta="A">
+        <enunciado>¿Cuántos años tiene un siglo?</enunciado>
+        <opcion>100</opcion>
+        <opcion>10</opcion>
+        <opcion>1000</opcion>
+        <opcion>12 meses</opcion>
+    </pregunta>
+
+    <pregunta correcta="C">
+        <enunciado>¿De qué color es el cielo en un día despejado?</enunciado>
+        <opcion>Verde</opcion>
+        <opcion>Rojo</opcion>
+        <opcion>Azul</opcion>
+        <opcion>Amarillo</opcion>
+    </pregunta>
+
+    <pregunta correcta="B">
+        <enunciado>¿Cuántos días tiene una semana?</enunciado>
+        <opcion>5</opcion>
+        <opcion>7</opcion>
+        <opcion>10</opcion>
+        <opcion>6</opcion>
+    </pregunta>
+
+</preguntas>

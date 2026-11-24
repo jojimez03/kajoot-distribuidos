@@ -1,0 +1,10 @@
+<!-- Lista de preguntas: al menos una -->
+<!ELEMENT preguntas (pregunta+)>
+
+<!-- Cada pregunta: un enunciado y exactamente 4 opciones, en orden A, B, C, D -->
+<!ELEMENT pregunta (enunciado, opcion, opcion, opcion, opcion)>
+<!-- Cada pregunta: lleva atributo de correcta con una de las 4 opciones -->
+<!ATTLIST pregunta correcta (A|B|C|D) #REQUIRED>
+
+<!ELEMENT enunciado (#PCDATA)>
+<!ELEMENT opcion (#PCDATA)>
