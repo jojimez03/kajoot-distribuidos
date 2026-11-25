@@ -10,6 +10,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * Origen de las preguntas: las lee de un fichero XML (validado con preguntas.dtd)
+ * usando DOM y las devuelve como lista de objetos Pregunta.
+ */
 
 public class BancoPreguntas {
 
@@ -35,7 +39,7 @@ public class BancoPreguntas {
         for (int i = 0; i < nodos.getLength(); i++) {
             Element e = (Element) nodos.item(i);
             String correcta = e.getAttribute("correcta");
-            String enunciado = e.getElementsByTagName("ennciado").item(0).getTextContent();
+            String enunciado = e.getElementsByTagName("enunciado").item(0).getTextContent();
 
             NodeList ops = e.getElementsByTagName("opcion");
             String[] opciones = new String[4];
