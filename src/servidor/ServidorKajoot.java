@@ -3,6 +3,7 @@ package servidor;
 import java.io.IOException;
 import java.net.*;
 import java.util.concurrent.Executors;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 
@@ -23,7 +24,18 @@ public class ServidorKajoot {
 
             // la partida arranca en su hilo y se queda en el await esperando
             // los jugadores entran aqui y se unen a la partida
-            Partida partida = new Partida(new BancoPreguntas().cargar(), numJugadores);
+
+
+            List<Pregunta> preguntas;
+            try {
+                preguntas = new BancoPreguntas("datos/preguntas.xml").cargar();
+            } catch (Exception e) {
+                System.out.println("No se pudieron cargar las preguntas: " + e.getMessage());
+                return;
+            }
+            System.out.println("Cargadas " + preguntas.size() + " preguntas");
+
+            Partida partida = new Partida(preguntas, numJugadores);
             pool.execute(partida);
             
             while(true){
