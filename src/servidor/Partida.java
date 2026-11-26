@@ -92,19 +92,18 @@ public class Partida implements Runnable{
     }
 
     public void registrarRespuesta(Jugador j, int n, String letra){
-        if(n==preguntaActual || hanRespondido.add(j)){
-            if(preguntas.get(preguntaActual-1).esCorrecta(letra)){
-                j.sumarPuntos(10);
-                j.enviar(Protocolo.construir(Protocolo.RESULTADO,"ACIERTO"));
-            }else{
-                j.enviar(Protocolo.construir(Protocolo.RESULTADO,"FALLO"));
-            }
-            // despues de enviar el reusltado
-            respuestasRonda.countDown();
-        }else{
+         if (n != preguntaActual || !hanRespondido.add(j)) {
             return; // respuesta tardia o repetida
         }
 
+        if (preguntas.get(n - 1).esCorrecta(letra)) {
+            j.sumarPuntos(10);
+            j.enviar(Protocolo.construir(Protocolo.RESULTADO, "ACIERTO"));
+        } else {
+            j.enviar(Protocolo.construir(Protocolo.RESULTADO, "FALLO"));
+        }
+         // después de enviar el resultado
+        respuestasRonda.countDown();  
     }
 
     private String ranking(){
