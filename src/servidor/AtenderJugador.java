@@ -3,6 +3,10 @@ package servidor;
 import java.io.IOException;
 import comun.Protocolo;
 
+/** 
+ * Hilo que se encarga de un jugador: lepide el nombre, lo mete enla partida y se queda escuchando
+ * sus respuestas hasta que se va. 
+ * */
 public class AtenderJugador implements Runnable {
 
     private Jugador jugador;
@@ -13,6 +17,7 @@ public class AtenderJugador implements Runnable {
         this.partida=partida;
     }
 
+    // saludo, unirse a la partida y escuchar respuestas y se las pasa a la partida (registrarRespuesta)
     @Override
     public void run() {
         try {

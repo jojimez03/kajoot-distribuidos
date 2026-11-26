@@ -4,6 +4,10 @@ import java.io.*;
 
 import comun.Protocolo;
 
+/** 
+ * Hilo del cliente desde el que lee todo lo que manda el servidor y lo muestra.
+ * No toca el teclado por lo que nunca se queda bloqueado esperando al jugador.
+ */
 public class EscucharServidor implements Runnable {
 
 
@@ -18,6 +22,7 @@ public class EscucharServidor implements Runnable {
     private void setPreguntaActual(int n) { preguntaActual = n; }
 
 
+    // muestra los mensages del servidor segun su tipo
     public void run(){
         try {
             String linea;
@@ -67,6 +72,7 @@ public class EscucharServidor implements Runnable {
                         for (int i = 1; i < campos.length; i++) {
                             System.out.println("  " + i + ". " + campos[i]);
                         }
+                        // como el main sigue bloqueando el teclado, con return el programa no terminaria, entonces exit.
                         System.exit(0);
 
                     default:
@@ -76,6 +82,7 @@ public class EscucharServidor implements Runnable {
         } catch (IOException e) {
             System.out.println("Conexión perdida con el servidor");
         }
+        // si el servidor se cae, tambien cierro parte del  cliente
         System.exit(0);
     
     }

@@ -23,6 +23,8 @@ public class BancoPreguntas {
         this.ruta=ruta;
     }
     
+    // Lee xml y crea Pregunta por cada <pregunta>
+    // si falla lanza excepcion para que el servidor decida qué hacer
     public List<Pregunta> cargar() throws Exception{
 
         List<Pregunta> preguntas = new ArrayList<>();

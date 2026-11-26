@@ -5,6 +5,12 @@ import java.util.concurrent.CountDownLatch;
 
 import comun.Protocolo;
 
+/** 
+ * Flujo de una Partida. Corre en su propio hilo: espera a que estén todos, manda cada pregunda a todos, 
+ * espera respuestas (o que s acabe el tiempo limite) y manda el ranking.
+ * Los hilos AtenderJugador y el Timer llaman a sus métodos desde fuera, por eso los que tocan el estado
+ * de la ronda son syncronized.
+ */
 public class Partida implements Runnable{
 
     private static final int SEGUNDOS = 20;
@@ -38,6 +44,7 @@ public class Partida implements Runnable{
         this.timer = new Timer();
     }
 
+    // Mete a un Jugador en la partida. Devuelve false si ya está llena.
     public boolean unirse(Jugador j){
         if(this.jugadores.size()!=numJugadores){
             this.jugadores.add(j);
@@ -48,6 +55,7 @@ public class Partida implements Runnable{
         }
     }
 
+    // El bucle del juego
     public void run(){
         try{
             // espero a que esten todos. En un futuro en vez de esperar a tener todos los jugadores esperados
@@ -58,9 +66,9 @@ public class Partida implements Runnable{
             this.preguntaActual=1;
 
             for(Pregunta p: preguntas){
+                // preparar la ronda antes de enviar la pregunta
                 respuestasRonda = new CountDownLatch(numJugadores);
                 
-
                 String mensajePreg = p.toMensaje(preguntaActual, numPreguntas);
                 enviarATodos(mensajePreg);
 
@@ -85,13 +93,16 @@ public class Partida implements Runnable{
         }
     }
 
+    // manda el mismo mensaje a todos los jugadores
     public void enviarATodos(String mensaje){
         for(Jugador j:jugadores){
             j.enviar(mensaje);
         }
     }
 
-    public void registrarRespuesta(Jugador j, int n, String letra){
+    // AtenderJugador la llama para regstrar la respuesta de un jugador.
+    // Aqui se corrige, suma puntos y avisa de que ha respondido
+    public synchronized void registrarRespuesta(Jugador j, int n, String letra){
          if (n != preguntaActual || !hanRespondido.add(j)) {
             return; // respuesta tardia o repetida
         }
@@ -106,6 +117,7 @@ public class Partida implements Runnable{
         respuestasRonda.countDown();  
     }
 
+    // devuelve el ranking, de mas a menos puntos
     private String ranking(){
         List<Jugador> quedan = new ArrayList<>(jugadores); // copia
         String[] campos = new String[quedan.size()];
@@ -124,8 +136,9 @@ public class Partida implements Runnable{
         return String.join("|", campos);
     }
 
-
-    public void cerrarPorTiempo(int n) {
+    // FinRonda (hilo del Timer) la llama cuando se acaba el tiempo:
+    // avisa a los que no han respondido y descuenta por ellos para que la partida continue
+    public synchronized void cerrarPorTiempo(int n) {
         if (n != preguntaActual) {
             return;   // esa ronda ya terminó: la tarea ha llegado tarde
         }

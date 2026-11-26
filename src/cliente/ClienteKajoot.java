@@ -11,6 +11,13 @@ import java.util.Scanner;
 
 import comun.Protocolo;
 
+/**
+ * Programa del jugador. 
+ * - un hilo main que lee el teclado y envia respuestas
+ * - un hilo EscucharServidor que lee y muetra todo lo que le llega al servidor
+ * (Por si un jugador no responde no se quede esperando en teclado.nextLine como pasaba antes
+ * Ahora, siguen llegando mensajes al cliente: tiempo agotado, ranking...)
+ */
 public class ClienteKajoot {
     
     public static void main(String[] args){
@@ -21,6 +28,7 @@ public class ClienteKajoot {
                 new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             PrintWriter salida = new PrintWriter(socket.getOutputStream(), true, StandardCharsets.UTF_8);
 
+            // Se lee el nombre desde main para que no haya dos hilos leyendo la "entrada" a la vez
             System.out.println("Tu nombre: ");
             String nombre = teclado.nextLine();
             salida.println(Protocolo.construir(Protocolo.NOMBRE, nombre));
@@ -35,11 +43,13 @@ public class ClienteKajoot {
 
             
             // el hilo que lee
+            // A partir de aqui, solo EscucharServidor va a leer "entrada"
             EscucharServidor escucha = new EscucharServidor(entrada);
             new Thread(escucha).start();
 
 
-            // solo lee el teclado y envia respuestas
+            // el main solo lee el teclado y envia respuestas
+            // el programa acaba cuando EscucharServidor recibe FIN
             while (true) {
                 // pedir la letra hasta que sea A, B, C o D
                 String letra = teclado.nextLine().trim().toUpperCase();

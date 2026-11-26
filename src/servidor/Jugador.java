@@ -4,6 +4,10 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Jugador conectado visto desde el servidor. Su socket, nombre y puntos.
+ * Envuelve los streams para que el resto del servidor solo haga enviar() y leer()
+ */
 public class Jugador {
 
     private Socket socket;
@@ -21,10 +25,12 @@ public class Jugador {
         // el nombre no lo se al crear el Jugador
     }
 
+    // Envia una linea al cliente. 
     public void enviar(String mensaje) {
         salida.println(mensaje);
     }
 
+    // Devuelve la siguiente linea  del cliente null si se ha desconectado
     public String leer() throws IOException {
         return entrada.readLine();
     }
@@ -35,6 +41,7 @@ public class Jugador {
     public void setNombre(String nombre) { this.nombre=nombre; }
     public int getPuntos() { return this.puntos; }
 
+    // Cierra conexion con el cliente
     public void cerrar() {
         try{
             socket.close();

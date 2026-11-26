@@ -10,6 +10,10 @@ import java.util.concurrent.ExecutorService;
 
 import comun.Protocolo;
 
+/** 
+ * Punto de entrada del servidor. Carga las preguntas, crea la partida y acepta conexiones.
+ * Le da a cada jugador su propio hilo AtenderJugador.
+ */
 public class ServidorKajoot {
     
     public static void main(String[] args){
@@ -22,9 +26,6 @@ public class ServidorKajoot {
             System.out.print("¿Cuántos jugadores? ");
             int numJugadores = teclado.nextInt();
 
-            // la partida arranca en su hilo y se queda en el await esperando
-            // los jugadores entran aqui y se unen a la partida
-
 
             List<Pregunta> preguntas;
             try {
@@ -35,11 +36,12 @@ public class ServidorKajoot {
             }
             System.out.println("Cargadas " + preguntas.size() + " preguntas");
 
+            // la partida arranca en su hilo y se queda en el await esperando
             Partida partida = new Partida(preguntas, numJugadores);
             pool.execute(partida);
             
             while(true){
-                
+                // los jugadores entran aqui y se unen a la partida
                 try{
                     Socket cliente = ss.accept();
                     Jugador jugador = new Jugador(cliente);
