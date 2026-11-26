@@ -1,9 +1,12 @@
 package cliente;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import comun.Protocolo;
@@ -14,8 +17,9 @@ public class ClienteKajoot {
         Scanner teclado = new Scanner(System.in);
 
         try(Socket socket = new Socket("localhost", Protocolo.PUERTO)){
-            DataInputStream entrada = new DataInputStream(socket.getInputStream());
-            PrintWriter salida  = new PrintWriter(socket.getOutputStream(),true);
+            BufferedReader entrada = new BufferedReader(
+                new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            PrintWriter salida = new PrintWriter(socket.getOutputStream(), true, StandardCharsets.UTF_8);
 
             System.out.println("Tu nombre: ");
             String nombre = teclado.nextLine();

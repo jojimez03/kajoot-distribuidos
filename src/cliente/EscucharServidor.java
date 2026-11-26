@@ -7,10 +7,10 @@ import comun.Protocolo;
 public class EscucharServidor implements Runnable {
 
 
-    private DataInputStream entrada;
+    private BufferedReader entrada;
     private int preguntaActual = 0;
 
-    public EscucharServidor(DataInputStream entrada){
+    public EscucharServidor(BufferedReader entrada){
         this.entrada=entrada;
     }
 
